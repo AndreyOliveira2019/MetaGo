@@ -6,10 +6,22 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\meta_logo4.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\favcon_meta.ico" />
     <None Remove="Images\favcon_meta.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\meta_logo4.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\meta_logo3.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\favcon_meta.ico" />
     <Resource Include="Images\favcon_meta.png" />
   </ItemGroup>
 

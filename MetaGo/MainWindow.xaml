@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MetaGo - Entregador" Height="700" Width="930"
         WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/Images/favcon_meta.png"
+        Icon="pack://application:,,,/Images/meta_logo3.ico"
         Background="#FF3F3B3B">
 
     <Grid Margin="10">
@@ -219,13 +219,13 @@
                          Style="{StaticResource StyledProgressBar}" Width="683"/>
 
             <TextBlock x:Name="lblMetaBatida"
-                       Text="🎉 Meta batida!"
-                       Foreground="LightCoral"
+                       Text="🎉 Parabéns Cachorro Loko(a), Meta Alcançada!"
+                       Foreground="White"
                        FontWeight="Bold"
                        FontSize="16"
                        Visibility="Collapsed"
                        HorizontalAlignment="Center"
-                       Margin="5,0,0,0"/>
+                       Margin="5,10,0,0"/>
 
 
 
