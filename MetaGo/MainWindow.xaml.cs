@@ -6,6 +6,9 @@ using System.Linq;
 using System.Windows;
 using System.Threading;
 using System.Windows.Controls;
+using System.IO;
+using System.Text.Json;
+
 
 namespace MetaGo
 {
@@ -38,6 +41,10 @@ namespace MetaGo
         {
             InitializeComponent();
 
+            CarregarConfiguracao();
+
+            CarregarRegistros();
+
             DataContext = this;
 
             // Configura a data atual
@@ -49,7 +56,57 @@ namespace MetaGo
             // Atualiza as informações do mês
             txtMetaMensal.Text = MetaMensal.ToString("F2");
             AtualizarInformacoesMes();
+
+            // 🔽 Define o foco no campo de data
+            Loaded += (s, e) => datePicker.Focus();
         }
+
+        private readonly string caminhoArquivo = "registros.json";
+
+        private readonly string caminhoConfig = "config.json";
+
+        private void SalvarRegistros()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(Registros, options);
+            File.WriteAllText(caminhoArquivo, json);
+        }
+
+        private void CarregarRegistros()
+        {
+            if (File.Exists(caminhoArquivo))
+            {
+                var json = File.ReadAllText(caminhoArquivo);
+                var registros = JsonSerializer.Deserialize<ObservableCollection<RegistroDiario>>(json);
+
+                if (registros != null)
+                {
+                    Registros.Clear();
+                    foreach (var r in registros)
+                        Registros.Add(r);
+                }
+            }
+        }
+
+        private void SalvarConfiguracao()
+        {
+            var config = new ConfiguracaoApp { MetaMensal = MetaMensal };
+            var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(caminhoConfig, json);
+        }
+
+        private void CarregarConfiguracao()
+        {
+            if (File.Exists(caminhoConfig))
+            {
+                var json = File.ReadAllText(caminhoConfig);
+                var config = JsonSerializer.Deserialize<ConfiguracaoApp>(json);
+
+                if (config != null)
+                    MetaMensal = config.MetaMensal;
+            }
+        }
+
 
         private void AtualizarInformacoesMes()
         {
@@ -57,7 +114,7 @@ namespace MetaGo
             var ultimoDiaMes = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
             var diasRestantes = (ultimoDiaMes - hoje).Days + 1;
 
-            lblDiasRestantes.Content = $"Dias restantes no mês: {diasRestantes}";
+            lblDiasRestantes.Text = $"Dias restantes no mês: {diasRestantes}";
 
             decimal totalGanhos = Registros.Sum(r => r.Ganhos);
             decimal totalDespesas = Registros.Sum(r => r.Despesas);
@@ -65,20 +122,23 @@ namespace MetaGo
 
             // Calcula a meta diária
             decimal metaDiaria = diasRestantes > 0 ? (MetaMensal - saldoAtual) / diasRestantes : 0;
-            lblMetaDiaria.Content = $"Meta diária: {metaDiaria:C}";
+            lblMetaDiaria.Text = $"Meta diária: {metaDiaria:C}";
 
             // Atualiza o resumo
-            lblTotalGanhos.Content = $"Total ganho: {totalGanhos:C}";
-            lblTotalDespesas.Content = $"Total gasto: {totalDespesas:C}";
-            lblSaldoAtual.Content = $"Saldo atual: {saldoAtual:C}";
+            lblTotalGanhos.Text = $"Total ganho: {totalGanhos:C}";
+            lblTotalDespesas.Text = $"Total gasto: {totalDespesas:C}";
+            lblSaldoAtual.Text = $"Saldo atual: {saldoAtual:C}";
 
             decimal mediaDiaria = Registros.Any() ? saldoAtual / Registros.Count : 0;
-            lblMediaDiaria.Content = $"Média diária: {mediaDiaria:C}";
+            lblMediaDiaria.Text = $"Média diária: {mediaDiaria:C}";
 
             decimal progresso = MetaMensal > 0 ? saldoAtual / MetaMensal : 0;
-            lblProgressoMeta.Content = $"Progresso da meta: {progresso:P1}";
+            lblProgressoMeta.Text = $"Progresso da meta: {progresso:P1}";
 
             progressBarMeta.Value = Convert.ToDouble(progresso) * 100;
+
+            // Mostra ou oculta a mensagem de meta batida
+            lblMetaBatida.Visibility = progresso >= 1 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void OnRegistrarClicked(object sender, RoutedEventArgs e)
@@ -114,6 +174,7 @@ namespace MetaGo
                 txtDespesas.Clear();
                 txtDescricaoDespesa.Clear();
                 AtualizarInformacoesMes();
+                SalvarRegistros();
 
                 datePicker.Focus();
             }
@@ -122,9 +183,8 @@ namespace MetaGo
                 MessageBox.Show("Por favor, insira valores válidos para ganhos e despesas.", "Erro",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
-
-
 
         private void OnRemoverSelecionadoClicked(object sender, RoutedEventArgs e)
         {
@@ -132,12 +192,15 @@ namespace MetaGo
             {
                 Registros.Remove(registro);
                 AtualizarInformacoesMes();
+                SalvarRegistros();
             }
             else
             {
                 MessageBox.Show("Por favor, selecione um registro para remover.", "Aviso",
                                 MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
+
         }
 
         private void OnLimparTodosClicked(object sender, RoutedEventArgs e)
@@ -153,6 +216,7 @@ namespace MetaGo
                 {
                     Registros.Clear();
                     AtualizarInformacoesMes();
+                    SalvarRegistros();
                 }
             }
             else
@@ -160,6 +224,8 @@ namespace MetaGo
                 MessageBox.Show("Não há registros para limpar.", "Aviso",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
             }
+
+
         }
 
         private void OnMetaMensalChanged(object sender, TextChangedEventArgs e)
@@ -167,6 +233,7 @@ namespace MetaGo
             if (decimal.TryParse(txtMetaMensal.Text, out decimal novaMeta))
             {
                 MetaMensal = novaMeta;
+                SalvarConfiguracao();
             }
         }
 
@@ -200,5 +267,7 @@ namespace MetaGo
             if (sender is TextBox tb)
                 tb.Dispatcher.BeginInvoke(new Action(tb.SelectAll));
         }
+
+
     }
 }

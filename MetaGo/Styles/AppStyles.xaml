@@ -49,13 +49,41 @@
     <Style TargetType="Label">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Foreground" Value="#333"/>
+        <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <!-- ProgressBar -->
     <Style TargetType="ProgressBar">
         <Setter Property="Height" Value="20"/>
         <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <Style x:Key="StyledProgressBar" TargetType="ProgressBar">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Border Background="#EEE" CornerRadius="10" SnapsToDevicePixels="true">
+                        <Grid x:Name="PART_Track" ClipToBounds="true">
+                            <Rectangle x:Name="PART_Indicator"
+                                   RadiusX="10"
+                                   RadiusY="10"
+                                   HorizontalAlignment="Left"
+                                   Fill="{TemplateBinding Foreground}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Degradê verde -->
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#4CAF50" Offset="0.0"/>
+                    <GradientStop Color="#81C784" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>

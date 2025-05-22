@@ -9,8 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\favcon_meta.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="MVVM\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\favcon_meta.png" />
   </ItemGroup>
 
 </Project>

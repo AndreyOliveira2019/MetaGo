@@ -1,8 +1,10 @@
 ﻿<Window x:Class="MetaGo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MetaGo - Entregador" Height="700" Width="900"
-        WindowStartupLocation="CenterScreen">
+        Title="MetaGo - Entregador" Height="700" Width="930"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/Images/favcon_meta.png"
+        Background="#FF3F3B3B">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -14,7 +16,7 @@
 
         <!-- Meta Mensal -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
-            <Label Content="Meta Mensal:"/>
+            <Label Content="Meta Atual:"/>
             <TextBox x:Name="txtMetaMensal"
                      Width="100"
                      TextChanged="OnMetaMensalChanged"
@@ -41,10 +43,13 @@
                      GotFocus="TextBox_SelectAllOnFocus"
                      LostFocus="Monetario_LostFocus"/>
             
-            <Label Content="Descrição:"/>
+            <Label Content="Tipo Despesa:"/>
             <TextBox x:Name="txtDescricaoDespesa" Width="150"/>
             
-            <Button Content="Registrar" Click="OnRegistrarClicked"/>
+            <Button Content="Registrar"
+                                            Width="100"
+                        Height="30"
+                    Click="OnRegistrarClicked"/>
         </StackPanel>
 
         <!-- Lista de Registros -->
@@ -130,26 +135,100 @@
 
 
         <!-- Resumo e Botões -->
+        
         <StackPanel Grid.Row="3" Margin="0,10" Orientation="Vertical">
-            <!-- Resumo -->
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                <Label x:Name="lblDiasRestantes"/>
-                <Label x:Name="lblMetaDiaria"/>
-                <Label x:Name="lblTotalGanhos"/>
-                <Label x:Name="lblTotalDespesas"/>
-                <Label x:Name="lblSaldoAtual"/>
-                <Label x:Name="lblMediaDiaria"/>
-                <Label x:Name="lblProgressoMeta"/>
-            </StackPanel>
-
-            <!-- Barra de Progresso -->
-            <ProgressBar x:Name="progressBarMeta" Minimum="0" Maximum="100"/>
-
+            
             <!-- Botões -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Remover Selecionado" Click="OnRemoverSelecionadoClicked"/>
-                <Button Content="Limpar Todos" Click="OnLimparTodosClicked"/>
+                <Button Content="Remover Selecionado"
+                        Width="150"
+                        Click="OnRemoverSelecionadoClicked"/>
+                <Button Content="Limpar Todos"
+                        Width="100"
+                        Height="30"
+                        Click="OnLimparTodosClicked"/>
             </StackPanel>
+            
+            <!-- Resumo -->
+            <UniformGrid Columns="2" Margin="0,10" HorizontalAlignment="Stretch">
+
+                <!-- Dias restantes -->
+                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Dias restantes no mês" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock x:Name="lblDiasRestantes" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Meta diária -->
+                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Meta diária" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock x:Name="lblMetaDiaria" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total ganho -->
+                <Border Background="#FFC5F1C9" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#FF32AF05" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Total ganho" FontWeight="Bold" Foreground="#FF32AF05"/>
+                        <TextBlock x:Name="lblTotalGanhos" FontSize="16" FontWeight="SemiBold" Foreground="#FF32AF05"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total gasto (mantém destaque vermelho) -->
+                <Border Background="#FFF3BEC6" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#FFCDD2" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Total gasto" FontWeight="Bold" Foreground="#C62828"/>
+                        <TextBlock x:Name="lblTotalDespesas" FontSize="16" FontWeight="SemiBold" Foreground="#C62828"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Saldo atual -->
+                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Saldo atual" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock x:Name="lblSaldoAtual" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Média diária -->
+                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Média diária" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock x:Name="lblMediaDiaria" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Progresso da meta -->
+                <Border Background="#FFBEE3E9" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Progresso da meta" FontWeight="Bold" Foreground="#FF0075FF"/>
+                        <TextBlock x:Name="lblProgressoMeta" FontSize="16" FontWeight="SemiBold" Foreground="#FF0075FF"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+
+
+            <!-- Barra de Progresso -->
+            <ProgressBar x:Name="progressBarMeta"
+                         Minimum="0"
+                         Maximum="100"
+                         Style="{StaticResource StyledProgressBar}" Width="683"/>
+
+            <TextBlock x:Name="lblMetaBatida"
+                       Text="🎉 Meta batida!"
+                       Foreground="LightCoral"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       Visibility="Collapsed"
+                       HorizontalAlignment="Center"
+                       Margin="5,0,0,0"/>
+
+
+
         </StackPanel>
 
     </Grid>
