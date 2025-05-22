@@ -1,0 +1,156 @@
+﻿<Window x:Class="MetaGo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MetaGo - Entregador" Height="700" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Meta Mensal -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
+            <Label Content="Meta Mensal:"/>
+            <TextBox x:Name="txtMetaMensal"
+                     Width="100"
+                     TextChanged="OnMetaMensalChanged"
+                     Style="{StaticResource MonetaryTextBox}"
+                     GotFocus="TextBox_SelectAllOnFocus"
+                     LostFocus="Monetario_LostFocus"/>
+            <Button Content="Atualizar" Visibility="Hidden" Click="OnAtualizarMetaClicked"/>
+        </StackPanel>
+
+        <!-- Entrada de Dados -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Center">
+            <Label Content="Data:"/>
+            <DatePicker x:Name="datePicker" Width="120" VerticalAlignment="Center"/>
+            
+            <Label Content="Ganhos:"/>
+            <TextBox x:Name="txtGanhos" Width="80"
+                     Style="{StaticResource MonetaryTextBox}"
+                     GotFocus="TextBox_SelectAllOnFocus"
+                     LostFocus="Monetario_LostFocus"/>
+            
+            <Label Content="Despesas:"/>
+            <TextBox x:Name="txtDespesas" Width="80"
+                     Style="{StaticResource MonetaryTextBox}"
+                     GotFocus="TextBox_SelectAllOnFocus"
+                     LostFocus="Monetario_LostFocus"/>
+            
+            <Label Content="Descrição:"/>
+            <TextBox x:Name="txtDescricaoDespesa" Width="150"/>
+            
+            <Button Content="Registrar" Click="OnRegistrarClicked"/>
+        </StackPanel>
+
+        <!-- Lista de Registros -->
+        <ListView x:Name="listViewRegistros"
+          Grid.Row="2"
+          Margin="0,10">
+            <!-- Define o estilo dos itens para forçar o alinhamento das células -->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <!-- Faz com que o conteúdo ocupe toda a largura da célula -->
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <!-- Define o estilo dos cabeçalhos para centralizar seu conteúdo -->
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Data" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Data, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Ganhos" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ganhos, StringFormat='R$ {0:N2}'}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Despesas" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Despesas, StringFormat='R$ {0:N2}'}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Tipo de Despesa" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DescricaoDespesa}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Saldo" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Saldo, StringFormat='R$ {0:N2}'}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <!-- Resumo e Botões -->
+        <StackPanel Grid.Row="3" Margin="0,10" Orientation="Vertical">
+            <!-- Resumo -->
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                <Label x:Name="lblDiasRestantes"/>
+                <Label x:Name="lblMetaDiaria"/>
+                <Label x:Name="lblTotalGanhos"/>
+                <Label x:Name="lblTotalDespesas"/>
+                <Label x:Name="lblSaldoAtual"/>
+                <Label x:Name="lblMediaDiaria"/>
+                <Label x:Name="lblProgressoMeta"/>
+            </StackPanel>
+
+            <!-- Barra de Progresso -->
+            <ProgressBar x:Name="progressBarMeta" Minimum="0" Maximum="100"/>
+
+            <!-- Botões -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Remover Selecionado" Click="OnRemoverSelecionadoClicked"/>
+                <Button Content="Limpar Todos" Click="OnLimparTodosClicked"/>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Window>
