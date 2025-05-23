@@ -9,5 +9,6 @@ namespace MetaGo
     public class ConfiguracaoApp
     {
         public decimal MetaMensal { get; set; }
+        public MainWindow.PeriodicidadeMeta Periodicidade { get; set; }
     }
 }

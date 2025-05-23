@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.IO;
 using System.Text.Json;
+using System.Windows.Controls.Primitives;
 
 
 namespace MetaGo
@@ -55,15 +56,40 @@ namespace MetaGo
 
             // Atualiza as informações do mês
             txtMetaMensal.Text = MetaMensal.ToString("F2");
-            AtualizarInformacoesMes();
 
-            // 🔽 Define o foco no campo de data
-            Loaded += (s, e) => datePicker.Focus();
+
+            Loaded += OnJanelaCarregada;
+
         }
+
+        private void OnJanelaCarregada(object sender, RoutedEventArgs e)
+        {
+            AtualizarInformacoesMes();
+            switch (_periodicidadeAtual)
+            {
+                case PeriodicidadeMeta.Diaria:
+                    tbDiario.IsChecked = true;
+                    break;
+                case PeriodicidadeMeta.Semanal:
+                    tbSemanal.IsChecked = true;
+                    break;
+                case PeriodicidadeMeta.Quinzenal:
+                    tbQuinzenal.IsChecked = true;
+                    break;
+                case PeriodicidadeMeta.Mensal:
+                    tbMensal.IsChecked = true;
+                    break;
+            }
+            datePicker.Focus();
+        }
+
+
+        // COnfiguração para salvar em JSON
 
         private readonly string caminhoArquivo = "registros.json";
 
         private readonly string caminhoConfig = "config.json";
+
 
         private void SalvarRegistros()
         {
@@ -90,9 +116,11 @@ namespace MetaGo
 
         private void SalvarConfiguracao()
         {
-            var config = new ConfiguracaoApp { MetaMensal = MetaMensal };
+            var config = new ConfiguracaoApp { MetaMensal = MetaMensal, Periodicidade = _periodicidadeAtual };
             var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(caminhoConfig, json);
+
+
         }
 
         private void CarregarConfiguracao()
@@ -104,6 +132,7 @@ namespace MetaGo
 
                 if (config != null)
                     MetaMensal = config.MetaMensal;
+                _periodicidadeAtual = config.Periodicidade;
             }
         }
 
@@ -111,10 +140,44 @@ namespace MetaGo
         private void AtualizarInformacoesMes()
         {
             var hoje = DateTime.Today;
-            var ultimoDiaMes = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
-            var diasRestantes = (ultimoDiaMes - hoje).Days + 1;
+            int diasRestantes;
+            string textoDiasRestantes;
 
-            lblDiasRestantes.Text = $"Dias restantes no mês: {diasRestantes}";
+            if (lblDiasRestantes == null || lblMetaDiaria == null || lblTotalGanhos == null ||
+                lblTotalDespesas == null || lblSaldoAtual == null || lblMediaDiaria == null ||
+                lblProgressoMeta == null || progressBarMeta == null || lblMetaBatida == null)
+            {
+                return; // Controles ainda não estão prontos
+            }
+
+            switch (_periodicidadeAtual)
+            {
+                case PeriodicidadeMeta.Diaria:
+                    diasRestantes = 1;
+                    textoDiasRestantes = "A meta expira hoje";
+                    break;
+
+                case PeriodicidadeMeta.Semanal:
+                    diasRestantes = 7 - (int)hoje.DayOfWeek +1;
+                    textoDiasRestantes = $"Dias restantes na semana: {diasRestantes}";
+                    break;
+
+                case PeriodicidadeMeta.Quinzenal:
+                    if (hoje.Day <= 15)
+                        diasRestantes = 15 - hoje.Day + 1;
+                    else
+                        diasRestantes = DateTime.DaysInMonth(hoje.Year, hoje.Month) - hoje.Day + 1;
+                    textoDiasRestantes = $"Dias restantes na quinzena: {diasRestantes}";
+                    break;
+
+                default:
+                    var ultimoDiaMes = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
+                    diasRestantes = (ultimoDiaMes - hoje).Days + 1;
+                    textoDiasRestantes = $"Dias restantes no mês: {diasRestantes}";
+                    break;
+            }
+
+            lblDiasRestantes.Text = textoDiasRestantes;
 
             decimal totalGanhos = Registros.Sum(r => r.Ganhos);
             decimal totalDespesas = Registros.Sum(r => r.Despesas);
@@ -123,6 +186,33 @@ namespace MetaGo
             // Calcula a meta diária
             decimal metaDiaria = diasRestantes > 0 ? (MetaMensal - saldoAtual) / diasRestantes : 0;
             lblMetaDiaria.Text = $"Meta diária: {metaDiaria:C}";
+
+            // Meta por Período
+            decimal metaPorPeriodo = 0;
+
+            switch (_periodicidadeAtual)
+            {
+                case PeriodicidadeMeta.Diaria:
+                    metaPorPeriodo = MetaMensal / DateTime.DaysInMonth(hoje.Year, hoje.Month);
+                    break;
+
+                case PeriodicidadeMeta.Semanal:
+                    int semanasRestantes = (int)Math.Ceiling((DateTime.DaysInMonth(hoje.Year, hoje.Month) - hoje.Day + 1) / 7.0);
+                    metaPorPeriodo = semanasRestantes > 0 ? MetaMensal / semanasRestantes : 0;
+                    break;
+
+                case PeriodicidadeMeta.Quinzenal:
+                    metaPorPeriodo = MetaMensal / 2;
+                    break;
+
+                case PeriodicidadeMeta.Mensal:
+                    metaPorPeriodo = MetaMensal;
+                    break;
+            }
+
+            // Atualiza o label no card novo
+            lblMetaPorPeriodo.Text = $"Meta por período: {metaPorPeriodo:C}";
+
 
             // Atualiza o resumo
             lblTotalGanhos.Text = $"Total ganho: {totalGanhos:C}";
@@ -135,11 +225,12 @@ namespace MetaGo
             decimal progresso = MetaMensal > 0 ? saldoAtual / MetaMensal : 0;
             lblProgressoMeta.Text = $"Progresso da meta: {progresso:P1}";
 
-            progressBarMeta.Value = Convert.ToDouble(progresso) * 100;
+            progressBarMeta.Value = (double)(progresso * 100);
 
-            // Mostra ou oculta a mensagem de meta batida
             lblMetaBatida.Visibility = progresso >= 1 ? Visibility.Visible : Visibility.Collapsed;
         }
+
+
 
         private void OnRegistrarClicked(object sender, RoutedEventArgs e)
         {
@@ -266,6 +357,40 @@ namespace MetaGo
         {
             if (sender is TextBox tb)
                 tb.Dispatcher.BeginInvoke(new Action(tb.SelectAll));
+        }
+
+        public enum PeriodicidadeMeta
+        {
+            Diaria,
+            Semanal,
+            Quinzenal,
+            Mensal
+        }
+
+        private PeriodicidadeMeta _periodicidadeAtual = PeriodicidadeMeta.Mensal;
+
+        private void OnPeriodicidadeChanged(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is ToggleButton toggleClicado))
+                return;
+
+            // Desmarcar os outros toggles
+            foreach (var toggle in new[] { tbDiario, tbSemanal, tbQuinzenal, tbMensal })
+            {
+                if (toggle != toggleClicado)
+                    toggle.IsChecked = false;
+            }
+
+            // Atualiza a periodicidade
+            _periodicidadeAtual = toggleClicado.Name switch
+            {
+                "tbDiario" => PeriodicidadeMeta.Diaria,
+                "tbSemanal" => PeriodicidadeMeta.Semanal,
+                "tbQuinzenal" => PeriodicidadeMeta.Quinzenal,
+                _ => PeriodicidadeMeta.Mensal,
+            };
+
+            AtualizarInformacoesMes();
         }
 
 

@@ -14,16 +14,30 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+
         <!-- Meta Mensal -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
-            <Label Content="Meta Atual:"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="180,0,0,0">
+            <Label Content="Meta Atual:"
+                   FontWeight="Bold"/>
             <TextBox x:Name="txtMetaMensal"
                      Width="100"
+                     FontWeight="ExtraBold"
                      TextChanged="OnMetaMensalChanged"
                      Style="{StaticResource MonetaryTextBox}"
                      GotFocus="TextBox_SelectAllOnFocus"
                      LostFocus="Monetario_LostFocus"/>
             <Button Content="Atualizar" Visibility="Hidden" Click="OnAtualizarMetaClicked"/>
+        </StackPanel>
+
+        <!-- ToggleButtons para periodicidade -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,10,0">
+            <ToggleButton x:Name="tbDiario" Content="Diária" Style="{StaticResource ToggleTabStyle}" Checked="OnPeriodicidadeChanged"/>
+            <ToggleButton x:Name="tbSemanal" Content="Semanal" Style="{StaticResource ToggleTabStyle}" Checked="OnPeriodicidadeChanged"/>
+            <ToggleButton x:Name="tbQuinzenal" Content="Quinzenal" Style="{StaticResource ToggleTabStyle}" Checked="OnPeriodicidadeChanged"/>
+            <ToggleButton x:Name="tbMensal" Content="Mensal" Style="{StaticResource ToggleTabStyle}" Checked="OnPeriodicidadeChanged" IsChecked="True"/>
         </StackPanel>
 
         <!-- Entrada de Dados -->
@@ -47,8 +61,8 @@
             <TextBox x:Name="txtDescricaoDespesa" Width="150"/>
             
             <Button Content="Registrar"
-                                            Width="100"
-                        Height="30"
+                    Width="100"
+                    Height="30"
                     Click="OnRegistrarClicked"/>
         </StackPanel>
 
@@ -155,7 +169,7 @@
                 <!-- Dias restantes -->
                 <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Dias restantes no mês" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock Text="Dias Restantes" FontWeight="Bold" Foreground="#555"/>
                         <TextBlock x:Name="lblDiasRestantes" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
                     </StackPanel>
                 </Border>
@@ -207,6 +221,14 @@
                         <TextBlock x:Name="lblProgressoMeta" FontSize="16" FontWeight="SemiBold" Foreground="#FF0075FF"/>
                     </StackPanel>
                 </Border>
+
+                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Meta por Período" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock x:Name="lblMetaPorPeriodo" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
 
             </UniformGrid>
 
