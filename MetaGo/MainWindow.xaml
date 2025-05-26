@@ -6,6 +6,36 @@
         Icon="pack://application:,,,/Images/meta_logo3.ico"
         Background="#FF3F3B3B">
 
+    <Window.Resources>
+        <Storyboard x:Key="PulsarEBrilhar">
+            <ColorAnimation
+            Storyboard.TargetName="lblValorRestanteMeta"
+            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+            From="LightCoral"
+            To="Red"
+            Duration="0:0:0.8"
+            AutoReverse="True"
+            RepeatBehavior="Forever"/>
+
+            <DoubleAnimation
+            Storyboard.TargetName="lblValorRestanteMeta"
+            Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleX)"
+            From="1.0" To="1.02"
+            Duration="0:0:0.8"
+            AutoReverse="True"
+            RepeatBehavior="Forever"/>
+
+            <DoubleAnimation
+            Storyboard.TargetName="lblValorRestanteMeta"
+            Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleY)"
+            From="1.0" To="1.02"
+            Duration="0:0:0.8"
+            AutoReverse="True"
+            RepeatBehavior="Forever"/>
+        </Storyboard>
+    </Window.Resources>
+
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -239,6 +269,19 @@
                          Minimum="0"
                          Maximum="100"
                          Style="{StaticResource StyledProgressBar}" Width="683"/>
+
+            <TextBlock x:Name="lblValorRestanteMeta"
+                       Text="Faltam: R$ 0,00 para atingir a meta"
+                       Foreground="White"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
+                       Margin="0,5,0,0">
+                <TextBlock.LayoutTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
 
             <TextBlock x:Name="lblMetaBatida"
                        Text="🎉 Parabéns Cachorro Loko(a), Meta Alcançada!"

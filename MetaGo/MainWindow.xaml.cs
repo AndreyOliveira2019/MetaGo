@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 
 namespace MetaGo
@@ -43,6 +45,8 @@ namespace MetaGo
             InitializeComponent();
 
             CarregarConfiguracao();
+
+            AtualizarInformacoesMes();
 
             CarregarRegistros();
 
@@ -158,7 +162,12 @@ namespace MetaGo
                     break;
 
                 case PeriodicidadeMeta.Semanal:
-                    diasRestantes = 7 - (int)hoje.DayOfWeek +1;
+
+                    int diasAteDomingo = DayOfWeek.Sunday - hoje.DayOfWeek;
+                    if (diasAteDomingo < 0)
+                        diasAteDomingo += 7;
+
+                    diasRestantes = diasAteDomingo + 1;
                     textoDiasRestantes = $"Dias restantes na semana: {diasRestantes}";
                     break;
 
@@ -224,6 +233,25 @@ namespace MetaGo
 
             decimal progresso = MetaMensal > 0 ? saldoAtual / MetaMensal : 0;
             lblProgressoMeta.Text = $"Progresso da meta: {progresso:P1}";
+
+            decimal valorRestante = MetaMensal - saldoAtual;
+
+            if (valorRestante > 0)
+            {
+                lblValorRestanteMeta.Text = $"Faltam: {valorRestante:C} para atingir a meta";
+                lblValorRestanteMeta.Foreground = new SolidColorBrush(Colors.White);
+
+                var storyboard = (Storyboard)FindResource("PulsarEBrilhar");
+                storyboard.Begin();
+            }
+            else
+            {
+                decimal valorExcedente = Math.Abs(valorRestante);
+                lblValorRestanteMeta.Text = $"🎉 Você ultrapassou {valorExcedente:C} da sua meta!";
+                lblValorRestanteMeta.Foreground = new SolidColorBrush(Colors.LightGreen);
+            }
+
+
 
             progressBarMeta.Value = (double)(progresso * 100);
 
