@@ -140,6 +140,66 @@ namespace MetaGo
             }
         }
 
+        private void OnSalvarComoClicked(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "meus_registros",
+                DefaultExt = ".json",
+                Filter = "Arquivo JSON (*.json)|*.json",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var options = new JsonSerializerOptions { WriteIndented = true };
+                    string json = JsonSerializer.Serialize(Registros, options);
+                    File.WriteAllText(dialog.FileName, json);
+                    MessageBox.Show("Registros salvos com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao salvar: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void OnAbrirArquivoClicked(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".json",
+                Filter = "Arquivo JSON (*.json)|*.json",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var json = File.ReadAllText(dialog.FileName);
+                    var registros = JsonSerializer.Deserialize<ObservableCollection<RegistroDiario>>(json);
+
+                    if (registros != null)
+                    {
+                        Registros.Clear();
+                        foreach (var r in registros)
+                            Registros.Add(r);
+
+                        AtualizarInformacoesMes();
+                        MessageBox.Show("Registros carregados com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+
 
         private void AtualizarInformacoesMes()
         {
