@@ -26,6 +26,8 @@ namespace MetaGo
             public decimal Saldo => Ganhos - Despesas;
         }
 
+        private string ultimaPastaUsada = AppDomain.CurrentDomain.BaseDirectory;
+
         private decimal _metaMensal = 10000m;
         public decimal MetaMensal
         {
@@ -154,7 +156,7 @@ namespace MetaGo
                 FileName = "meus_registros",
                 DefaultExt = ".json",
                 Filter = "Arquivo JSON (*.json)|*.json",
-                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
+                InitialDirectory = ultimaPastaUsada
             };
 
             if (dialog.ShowDialog() == true)
@@ -170,6 +172,8 @@ namespace MetaGo
                     var options = new JsonSerializerOptions { WriteIndented = true };
                     string json = JsonSerializer.Serialize(dados, options);
                     File.WriteAllText(dialog.FileName, json);
+                    ultimaPastaUsada = Path.GetDirectoryName(dialog.FileName)!;
+
 
                     MessageBox.Show("Registros e meta salvos com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -187,7 +191,7 @@ namespace MetaGo
             {
                 DefaultExt = ".json",
                 Filter = "Arquivo JSON (*.json)|*.json",
-                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
+                InitialDirectory = ultimaPastaUsada
             };
 
             if (dialog.ShowDialog() == true)
@@ -195,6 +199,7 @@ namespace MetaGo
                 try
                 {
                     var json = File.ReadAllText(dialog.FileName);
+                    ultimaPastaUsada = Path.GetDirectoryName(dialog.FileName)!;
                     var dados = JsonSerializer.Deserialize<DadosCompletos>(json);
 
                     if (dados != null)
