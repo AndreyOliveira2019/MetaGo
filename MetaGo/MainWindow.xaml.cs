@@ -66,6 +66,13 @@ namespace MetaGo
 
         }
 
+        public class DadosCompletos
+        {
+            public decimal MetaMensal { get; set; }
+            public ObservableCollection<RegistroDiario> Registros { get; set; } = new();
+        }
+
+
         private void OnJanelaCarregada(object sender, RoutedEventArgs e)
         {
             AtualizarInformacoesMes();
@@ -154,10 +161,17 @@ namespace MetaGo
             {
                 try
                 {
+                    var dados = new DadosCompletos
+                    {
+                        MetaMensal = this.MetaMensal,
+                        Registros = new ObservableCollection<RegistroDiario>(this.Registros)
+                    };
+
                     var options = new JsonSerializerOptions { WriteIndented = true };
-                    string json = JsonSerializer.Serialize(Registros, options);
+                    string json = JsonSerializer.Serialize(dados, options);
                     File.WriteAllText(dialog.FileName, json);
-                    MessageBox.Show("Registros salvos com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    MessageBox.Show("Registros e meta salvos com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -165,6 +179,7 @@ namespace MetaGo
                 }
             }
         }
+
 
         private void OnAbrirArquivoClicked(object sender, RoutedEventArgs e)
         {
@@ -180,16 +195,19 @@ namespace MetaGo
                 try
                 {
                     var json = File.ReadAllText(dialog.FileName);
-                    var registros = JsonSerializer.Deserialize<ObservableCollection<RegistroDiario>>(json);
+                    var dados = JsonSerializer.Deserialize<DadosCompletos>(json);
 
-                    if (registros != null)
+                    if (dados != null)
                     {
+                        MetaMensal = dados.MetaMensal;
+                        txtMetaMensal.Text = MetaMensal.ToString("F2");
+
                         Registros.Clear();
-                        foreach (var r in registros)
+                        foreach (var r in dados.Registros)
                             Registros.Add(r);
 
                         AtualizarInformacoesMes();
-                        MessageBox.Show("Registros carregados com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Registros e meta carregados com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex)
@@ -198,6 +216,7 @@ namespace MetaGo
                 }
             }
         }
+
 
 
 
