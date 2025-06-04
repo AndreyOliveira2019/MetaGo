@@ -505,6 +505,11 @@ namespace MetaGo
             AtualizarInformacoesMes();
         }
 
-
+        private void OnAbrirTelaConsumoCombustivelClicked(object sender, RoutedEventArgs e)
+        {
+            var tela = new MetaGo.View.TelaConsumoCombustivel();
+            tela.Owner = this;
+            tela.ShowDialog();
+        }
     }
 }

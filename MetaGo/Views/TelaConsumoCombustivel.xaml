@@ -1,0 +1,87 @@
+<Window x:Class="MetaGo.View.TelaConsumoCombustivel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Controle de Consumo de Combustível"
+        Height="700" Width="1050"
+        Background="#FF3F3B3B"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Formulário de abastecimento -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Top" Margin="0,0,0,10">
+            <Label Content="Posto:"/>
+            <TextBox Name="txtNomePosto" Width="120"/>
+
+            <Label Content="Combustível:"/>
+            <ComboBox Name="cbTipoCombustivel" Width="150" Margin="5">
+                <ComboBoxItem Content="Etanol"/>
+                <ComboBoxItem Content="Gasolina Comum"/>
+                <ComboBoxItem Content="Gasolina Aditivada"/>
+            </ComboBox>
+
+            <Label Content="R$/Litro:"/>
+            <TextBox Name="txtValorLitro" Width="80" Style="{StaticResource MonetaryTextBox}"/>
+
+            <Label Content="Litros:"/>
+            <TextBox Name="txtLitros" Width="80" Style="{StaticResource MonetaryTextBox}"/>
+
+            <Label Content="Data:"/>
+            <DatePicker Name="dpDataAbastecimento" Width="130" Margin="0,5,0,0" Height="27"/>
+
+            <Button Content="Registrar" Click="OnRegistrarAbastecimentoClicked"/>
+        </StackPanel>
+
+        <!-- ListView de registros -->
+        <ListView Name="lvAbastecimentos" Grid.Row="1" Margin="0,0,0,10">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding DataAbastecimento}"/>
+                    <GridViewColumn Header="Posto" Width="350" DisplayMemberBinding="{Binding NomePosto}"/>
+                    <GridViewColumn Header="Tipo" Width="120" DisplayMemberBinding="{Binding TipoCombustivel}"/>
+                    <GridViewColumn Header="R$/L" Width="100" DisplayMemberBinding="{Binding ValorLitro}"/>
+                    <GridViewColumn Header="Litros" Width="100" DisplayMemberBinding="{Binding LitrosAbastecidos}"/>
+                    <GridViewColumn Header="Autonomia" Width="100" DisplayMemberBinding="{Binding AutonomiaKm}"/>
+                    <GridViewColumn Header="Km/L" Width="100" DisplayMemberBinding="{Binding KmPorLitro}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Parte inferior: registrar autonomia e mostrar cards -->
+        <StackPanel Grid.Row="2" Margin="0">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <Label Content="Autonomia (km):"/>
+                <TextBox Name="txtAutonomia" Width="100"/>
+                <Button Content="Registrar Autonomia" Click="OnRegistrarAutonomiaClicked"/>
+            </StackPanel>
+
+            <UniformGrid Columns="3" HorizontalAlignment="Stretch">
+                <Border Background="#555" CornerRadius="10" Margin="5" Padding="10">
+                    <TextBlock Name="lblPostoMaisBarato" Foreground="White" FontWeight="Bold" Text="Posto mais barato"/>
+                </Border>
+                <Border Background="#555" CornerRadius="10" Margin="5" Padding="10">
+                    <TextBlock Name="lblMaisUsado" Foreground="White" FontWeight="Bold" Text="Mais utilizado"/>
+                </Border>
+                <Border Background="#555" CornerRadius="10" Margin="5" Padding="10">
+                    <TextBlock Name="lblMelhorCustoBeneficio" Foreground="White" FontWeight="Bold" Text="Melhor custo-benefício"/>
+                </Border>
+            </UniformGrid>
+        </StackPanel>
+    </Grid>
+</Window>
