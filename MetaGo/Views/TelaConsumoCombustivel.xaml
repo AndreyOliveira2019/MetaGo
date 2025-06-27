@@ -19,27 +19,39 @@
             <Label Content="Data:"/>
             <DatePicker Name="dpDataAbastecimento" Width="106" Margin="0,5,0,0" Height="27"/>
 
+            <Rectangle Width="25" Height="0" />
+
             <Label Content="Posto:"/>
             <TextBox Name="txtNomePosto" Width="403"/>
 
+            <Rectangle Width="25" Height="0" />
+
             <Label Content="Combustível:"
-           VerticalContentAlignment="Center"
-           VerticalAlignment="Center"/>
+                   VerticalContentAlignment="Center"
+                   VerticalAlignment="Center"/>
             <ComboBox Name="cbTipoCombustivel" Width="118" Margin="5"
-              VerticalContentAlignment="Center">
+                      VerticalContentAlignment="Center">
                 <ComboBoxItem Content="Etanol"/>
                 <ComboBoxItem Content="Gasolina Comum"/>
                 <ComboBoxItem Content="Gasolina Aditivada"/>
             </ComboBox>
 
-            <Label Content="R$/Litro:" Width="61"/>
+            <Rectangle Width="25" Height="0" />
+
+            <Label Content="Preço do Litro (R$):" Width="130"/>
             <TextBox x:Name="txtValorLitro" Width="65"/>
 
-            <Label Content="R$/Abastecido:"/>
+            <Rectangle Width="25" Height="0" />
+
+            <Label Content="Valor Abastecido (R$):" Width="145"/>
             <TextBox x:Name="txtValorAbastecido" Width="65"/>
+
+            <Rectangle Width="25" Height="0" />
 
             <Label Content="Litros:"/>
             <TextBox x:Name="txtLitros" Width="58"/>
+
+            <Rectangle Width="25" Height="0" />
 
             <Button Content="Registrar" Click="OnRegistrarAbastecimentoClicked"/>
         </WrapPanel>
@@ -65,8 +77,8 @@
                     <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding DataAbastecimento, StringFormat={}{0:dd/MM/yyyy}}"/>
                     <GridViewColumn Header="Posto" Width="280" DisplayMemberBinding="{Binding NomePosto}"/>
                     <GridViewColumn Header="Tipo" Width="120" DisplayMemberBinding="{Binding TipoCombustivel}"/>
-                    <GridViewColumn Header="R$/L" Width="100" DisplayMemberBinding="{Binding ValorLitro}"/>
-                    <GridViewColumn Header="Valor Abastecido" Width="100" DisplayMemberBinding="{Binding ValorAbastecido}"/>
+                    <GridViewColumn Header="R$/L" Width="100" DisplayMemberBinding="{Binding ValorLitro, StringFormat={} R$ {0:F4}}"/>
+                    <GridViewColumn Header="Valor Abastecido" Width="100" DisplayMemberBinding="{Binding ValorAbastecido, StringFormat={} R$ {0:F2}}"/>
                     <GridViewColumn Header="Litros" Width="100" DisplayMemberBinding="{Binding LitrosAbastecidos}"/>
                     <GridViewColumn Header="Autonomia" Width="100" DisplayMemberBinding="{Binding AutonomiaKm}"/>
                     <GridViewColumn Header="Km/L" Width="100" DisplayMemberBinding="{Binding KmPorLitro, StringFormat={}{0:F2}}"/>
@@ -90,7 +102,7 @@
                     <TextBlock Name="lblMaisUsado" Foreground="White" FontWeight="Bold" Text="Mais utilizado"/>
                 </Border>
                 <Border Background="#555" CornerRadius="10" Margin="5" Padding="10">
-                    <TextBlock Name="lblMelhorCustoBeneficio" Foreground="White" FontWeight="Bold" Text="Melhor custo-benefício"/>
+                    <TextBlock Name="lblMelhorCustoBeneficio" Foreground="White" FontWeight="Bold" Text="Melhor custo:"/>
                 </Border>
             </UniformGrid>
         </StackPanel>

@@ -31,6 +31,8 @@ namespace MetaGo.View
             txtLitros.TextChanged += OnCampoAlterado;
             txtValorAbastecido.TextChanged += OnCampoAlterado;
 
+            cbTipoCombustivel.SelectedIndex = 1;
+
             dpDataAbastecimento.SelectedDate = DateTime.Today;
 
 
@@ -132,7 +134,7 @@ namespace MetaGo.View
             if (melhorCusto != null)
             {
                 double custoBeneficio = melhorCusto.KmPorLitro.Value / (double)melhorCusto.ValorLitro;
-                lblMelhorCustoBeneficio.Text = $"Melhor custo/benefício: {melhorCusto.TipoCombustivel} ({custoBeneficio:F2} km/R$)";
+                lblMelhorCustoBeneficio.Text = $"Melhor custo: {melhorCusto.TipoCombustivel} ({custoBeneficio:F2} km/R$)";
             }
         }
     }
