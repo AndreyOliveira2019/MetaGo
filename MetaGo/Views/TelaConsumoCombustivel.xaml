@@ -8,40 +8,50 @@
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" MinHeight="117"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="226.04"/>
         </Grid.RowDefinitions>
 
         <!-- Formulário de abastecimento -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Top" Margin="0,0,0,10">
-            <Label Content="Posto:"/>
-            <TextBox Name="txtNomePosto" Width="120"/>
+        <WrapPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Top" Height="81">
 
-            <Label Content="Combustível:"/>
-            <ComboBox Name="cbTipoCombustivel" Width="150" Margin="5">
+            <Label Content="Data:"/>
+            <DatePicker Name="dpDataAbastecimento" Width="106" Margin="0,5,0,0" Height="27"/>
+
+            <Label Content="Posto:"/>
+            <TextBox Name="txtNomePosto" Width="403"/>
+
+            <Label Content="Combustível:"
+           VerticalContentAlignment="Center"
+           VerticalAlignment="Center"/>
+            <ComboBox Name="cbTipoCombustivel" Width="118" Margin="5"
+              VerticalContentAlignment="Center">
                 <ComboBoxItem Content="Etanol"/>
                 <ComboBoxItem Content="Gasolina Comum"/>
                 <ComboBoxItem Content="Gasolina Aditivada"/>
             </ComboBox>
 
-            <Label Content="R$/Litro:"/>
-            <TextBox Name="txtValorLitro" Width="80" Style="{StaticResource MonetaryTextBox}"/>
+            <Label Content="R$/Litro:" Width="61"/>
+            <TextBox Name="txtValorLitro" Width="65" Style="{StaticResource MonetaryTextBox}"/>
+
+            <Label Content="R$/Abastecido:"/>
+            <TextBox Name="txtValorAbastecido" Width="65" Style="{StaticResource MonetaryTextBox}"/>
 
             <Label Content="Litros:"/>
-            <TextBox Name="txtLitros" Width="80" Style="{StaticResource MonetaryTextBox}"/>
-
-            <Label Content="Data:"/>
-            <DatePicker Name="dpDataAbastecimento" Width="130" Margin="0,5,0,0" Height="27"/>
+            <TextBox Name="txtLitros" Width="58"/>
 
             <Button Content="Registrar" Click="OnRegistrarAbastecimentoClicked"/>
-        </StackPanel>
+        </WrapPanel>
+
 
         <!-- ListView de registros -->
-        <ListView Name="lvAbastecimentos" Grid.Row="1" Margin="0,0,0,10">
+        <ListView Name="lvAbastecimentos" Grid.Row="1" Margin="0,10,0,10"
+                  BorderThickness="2"
+                  BorderBrush="#2196F3">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.Resources>
@@ -53,9 +63,10 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding DataAbastecimento}"/>
-                    <GridViewColumn Header="Posto" Width="350" DisplayMemberBinding="{Binding NomePosto}"/>
+                    <GridViewColumn Header="Posto" Width="300" DisplayMemberBinding="{Binding NomePosto}"/>
                     <GridViewColumn Header="Tipo" Width="120" DisplayMemberBinding="{Binding TipoCombustivel}"/>
                     <GridViewColumn Header="R$/L" Width="100" DisplayMemberBinding="{Binding ValorLitro}"/>
+                    <GridViewColumn Header="Valor Abastecido" Width="100" DisplayMemberBinding="{Binding ValorAbastecido}"/>
                     <GridViewColumn Header="Litros" Width="100" DisplayMemberBinding="{Binding LitrosAbastecidos}"/>
                     <GridViewColumn Header="Autonomia" Width="100" DisplayMemberBinding="{Binding AutonomiaKm}"/>
                     <GridViewColumn Header="Km/L" Width="100" DisplayMemberBinding="{Binding KmPorLitro}"/>
@@ -64,7 +75,7 @@
         </ListView>
 
         <!-- Parte inferior: registrar autonomia e mostrar cards -->
-        <StackPanel Grid.Row="2" Margin="0">
+        <StackPanel Grid.Row="2" Margin="0,5,0,39">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <Label Content="Autonomia (km):"/>
                 <TextBox Name="txtAutonomia" Width="100"/>
