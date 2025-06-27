@@ -1,14 +1,16 @@
-﻿using System;
+﻿using MetaGo.View;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Threading;
-using System.Windows.Controls;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
@@ -42,6 +44,9 @@ namespace MetaGo
 
         public ObservableCollection<RegistroDiario> Registros { get; set; } = new();
 
+        private ObservableCollection<TelaConsumoCombustivel.RegistroCombustivel> combustiveis = new();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -72,7 +77,11 @@ namespace MetaGo
         {
             public decimal MetaMensal { get; set; }
             public ObservableCollection<RegistroDiario> Registros { get; set; } = new();
+
+            // ✅ NOVO
+            public ObservableCollection<MetaGo.View.TelaConsumoCombustivel.RegistroCombustivel> Combustiveis { get; set; } = new();
         }
+
 
 
         private void OnJanelaCarregada(object sender, RoutedEventArgs e)
@@ -104,28 +113,46 @@ namespace MetaGo
         private readonly string caminhoConfig = "config.json";
 
 
-        private void SalvarRegistros()
+        public void SalvarRegistros()
         {
+            var dados = new DadosCompletos
+            {
+                MetaMensal = MetaMensal,
+                Registros = Registros,
+                Combustiveis = combustiveis
+            };
+
             var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(Registros, options);
+            var json = JsonSerializer.Serialize(dados, options);
             File.WriteAllText(caminhoArquivo, json);
         }
+
+
+
 
         private void CarregarRegistros()
         {
             if (File.Exists(caminhoArquivo))
             {
                 var json = File.ReadAllText(caminhoArquivo);
-                var registros = JsonSerializer.Deserialize<ObservableCollection<RegistroDiario>>(json);
+                var dados = JsonSerializer.Deserialize<DadosCompletos>(json);
 
-                if (registros != null)
+                if (dados != null)
                 {
                     Registros.Clear();
-                    foreach (var r in registros)
+                    foreach (var r in dados.Registros)
                         Registros.Add(r);
+
+                    MetaMensal = dados.MetaMensal;
+
+                    if (dados.Combustiveis != null && telaCombustivel != null)
+                    {
+                        telaCombustivel.CarregarRegistros(dados.Combustiveis);
+                    }
                 }
             }
         }
+
 
         private void SalvarConfiguracao()
         {
@@ -166,7 +193,8 @@ namespace MetaGo
                     var dados = new DadosCompletos
                     {
                         MetaMensal = this.MetaMensal,
-                        Registros = new ObservableCollection<RegistroDiario>(this.Registros)
+                        Registros = new ObservableCollection<RegistroDiario>(this.Registros),
+                        Combustiveis = combustiveis
                     };
 
                     var options = new JsonSerializerOptions { WriteIndented = true };
@@ -214,6 +242,18 @@ namespace MetaGo
                         AtualizarInformacoesMes();
                         MessageBox.Show("Registros e meta carregados com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
+
+                    if (dados.Combustiveis != null)
+                    {
+                        if (telaCombustivel == null)
+                            telaCombustivel = new TelaConsumoCombustivel();
+
+                        combustiveis = dados.Combustiveis;
+                        if (telaCombustivel != null)
+                            telaCombustivel.CarregarRegistros(combustiveis);
+
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -505,11 +545,41 @@ namespace MetaGo
             AtualizarInformacoesMes();
         }
 
+        public void AtualizarRegistrosCombustivel(ObservableCollection<TelaConsumoCombustivel.RegistroCombustivel> lista)
+        {
+            combustiveis = lista;
+        }
+
         private void OnAbrirTelaConsumoCombustivelClicked(object sender, RoutedEventArgs e)
         {
-            var tela = new MetaGo.View.TelaConsumoCombustivel();
-            tela.Owner = this;
-            tela.ShowDialog();
+            if (telaCombustivel == null || !telaCombustivel.IsLoaded)
+            {
+                telaCombustivel = new MetaGo.View.TelaConsumoCombustivel();
+
+                telaCombustivel.RegistroAtualizado += (senderTela, listaAtualizada) =>
+                {
+                    combustiveis = listaAtualizada;
+                };
+
+                telaCombustivel.CarregarRegistros(combustiveis);
+                telaCombustivel.Owner = this;
+                telaCombustivel.Closed += (s, _) => telaCombustivel = null;
+            }
+
+            telaCombustivel.Show();
+            telaCombustivel.Activate();
+        }
+
+        private TelaConsumoCombustivel? telaCombustivel;
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
     }
+
+
 }

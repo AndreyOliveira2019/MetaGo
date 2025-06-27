@@ -4,7 +4,8 @@
         Title="MetaGo - Entregador" Height="700" Width="930"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/Images/meta_logo3.ico"
-        Background="#FF3F3B3B">
+        Background="#FF3F3B3B"
+        KeyDown="Window_KeyDown">
 
     <Window.Resources>
         <Storyboard x:Key="PulsarEBrilhar">
