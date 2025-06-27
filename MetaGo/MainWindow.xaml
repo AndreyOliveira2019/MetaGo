@@ -199,7 +199,7 @@
         <StackPanel Grid.Row="3" Margin="0,10" Orientation="Vertical">
 
             <!-- Botões -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="902">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="902" Cursor="Hand">
                 <Button Content="Consumo de Combustível"
                         Click="OnAbrirTelaConsumoCombustivelClicked"
                         Margin="10,0,0,0"
@@ -208,10 +208,18 @@
                         Background="#FFC87B7B"
                         BorderBrush="#FFC87B7B" Cursor="Hand"/>
 
+                <Button Content="Manutenção"
+                        Click="OnAbrirTelaManutencaoClicked"
+                        Margin="10,0,0,0"
+                        Height="30"
+                        Padding="10,5"
+                        Background="#FF857EFF"
+                        BorderBrush="#FF857EFF" Cursor="Hand"/>
+
                 <Button Content="Remover Selecionado"
                         Width="150"
                         Height="30"
-                        Margin="465,0,0,0"
+                        Margin="350,0,0,0"
                         Click="OnRemoverSelecionadoClicked"/>
                 <Button Content="Limpar Todos"
                         Width="100"

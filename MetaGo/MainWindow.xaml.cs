@@ -1,4 +1,5 @@
 ﻿using MetaGo.View;
+using MetaGo.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ using System.Windows.Media.Animation;
 
 namespace MetaGo
 {
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public class RegistroDiario
@@ -578,6 +580,13 @@ namespace MetaGo
             {
                 this.Close();
             }
+        }
+
+        private MetaGo.Views.TelaManutencao telaManutencao;
+        private void OnAbrirTelaManutencaoClicked(object sender, RoutedEventArgs e)
+        {
+            telaManutencao = new MetaGo.Views.TelaManutencao();
+            telaManutencao.Show();
         }
     }
 
