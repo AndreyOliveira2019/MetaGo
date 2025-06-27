@@ -33,13 +33,13 @@
             </ComboBox>
 
             <Label Content="R$/Litro:" Width="61"/>
-            <TextBox Name="txtValorLitro" Width="65" Style="{StaticResource MonetaryTextBox}"/>
+            <TextBox x:Name="txtValorLitro" Width="65"/>
 
             <Label Content="R$/Abastecido:"/>
-            <TextBox Name="txtValorAbastecido" Width="65" Style="{StaticResource MonetaryTextBox}"/>
+            <TextBox x:Name="txtValorAbastecido" Width="65"/>
 
             <Label Content="Litros:"/>
-            <TextBox Name="txtLitros" Width="58"/>
+            <TextBox x:Name="txtLitros" Width="58"/>
 
             <Button Content="Registrar" Click="OnRegistrarAbastecimentoClicked"/>
         </WrapPanel>
@@ -62,14 +62,14 @@
             </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding DataAbastecimento}"/>
-                    <GridViewColumn Header="Posto" Width="300" DisplayMemberBinding="{Binding NomePosto}"/>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding DataAbastecimento, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <GridViewColumn Header="Posto" Width="280" DisplayMemberBinding="{Binding NomePosto}"/>
                     <GridViewColumn Header="Tipo" Width="120" DisplayMemberBinding="{Binding TipoCombustivel}"/>
                     <GridViewColumn Header="R$/L" Width="100" DisplayMemberBinding="{Binding ValorLitro}"/>
                     <GridViewColumn Header="Valor Abastecido" Width="100" DisplayMemberBinding="{Binding ValorAbastecido}"/>
                     <GridViewColumn Header="Litros" Width="100" DisplayMemberBinding="{Binding LitrosAbastecidos}"/>
                     <GridViewColumn Header="Autonomia" Width="100" DisplayMemberBinding="{Binding AutonomiaKm}"/>
-                    <GridViewColumn Header="Km/L" Width="100" DisplayMemberBinding="{Binding KmPorLitro}"/>
+                    <GridViewColumn Header="Km/L" Width="100" DisplayMemberBinding="{Binding KmPorLitro, StringFormat={}{0:F2}}"/>
                 </GridView>
             </ListView.View>
         </ListView>
