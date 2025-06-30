@@ -212,7 +212,7 @@
                     <GridViewColumn Header="Horas Trabalhadas" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding HorasTrabalhadas}"
+                                <TextBlock Text="{Binding HorasTrabalhadas, StringFormat={}{0:hh\\:mm}}"
                                            HorizontalAlignment="Center"
                                            TextAlignment="Center"
                                            VerticalAlignment="Center"/>
@@ -261,70 +261,89 @@
             <UniformGrid Columns="2" Margin="0,10" HorizontalAlignment="Stretch">
 
                 <!-- Dias restantes -->
-                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FAFAFA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Dias Restantes" FontWeight="Bold" Foreground="#555"/>
-                        <TextBlock x:Name="lblDiasRestantes" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                        <TextBlock Text="Dias Restantes" FontWeight="Bold" Foreground="#555" FontSize="13"/>
+                        <TextBlock x:Name="lblDiasRestantes" FontSize="14" FontWeight="SemiBold" Foreground="#333"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Meta diária -->
-                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FAFAFA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Meta diária" FontWeight="Bold" Foreground="#555"/>
-                        <TextBlock x:Name="lblMetaDiaria" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                        <TextBlock Text="Meta diária" FontWeight="Bold" Foreground="#555" FontSize="13"/>
+                        <TextBlock x:Name="lblMetaDiaria" FontSize="14" FontWeight="SemiBold" Foreground="#333"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Total ganho -->
-                <Border Background="#FFC5F1C9" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#FF32AF05" BorderThickness="1">
+                <Border Background="#FFD8F0DA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#FF32AF05" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Total ganho" FontWeight="Bold" Foreground="#FF32AF05"/>
-                        <TextBlock x:Name="lblTotalGanhos" FontSize="16" FontWeight="SemiBold" Foreground="#FF32AF05"/>
+                        <TextBlock Text="Total ganho" FontWeight="Bold" Foreground="#FF205F09" FontSize="13"/>
+                        <TextBlock x:Name="lblTotalGanhos" FontSize="14" FontWeight="SemiBold" Foreground="#FF205F09"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Total gasto (mantém destaque vermelho) -->
-                <Border Background="#FFF3BEC6" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#FFCDD2" BorderThickness="1">
+                <!-- Total gasto -->
+                <Border Background="#FFF3BEC6" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#FFCDD2" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Total gasto" FontWeight="Bold" Foreground="#C62828"/>
-                        <TextBlock x:Name="lblTotalDespesas" FontSize="16" FontWeight="SemiBold" Foreground="#C62828"/>
+                        <TextBlock Text="Total gasto" FontWeight="Bold" Foreground="#C62828" FontSize="13"/>
+                        <TextBlock x:Name="lblTotalDespesas" FontSize="14" FontWeight="SemiBold" Foreground="#C62828"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Saldo atual -->
-                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FAFAFA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Saldo atual" FontWeight="Bold" Foreground="#555"/>
-                        <TextBlock x:Name="lblSaldoAtual" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                        <TextBlock Text="Saldo atual" FontWeight="Bold" Foreground="#555" FontSize="13"/>
+                        <TextBlock x:Name="lblSaldoAtual" FontSize="14" FontWeight="SemiBold" Foreground="#333"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Média diária -->
-                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FAFAFA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Média diária" FontWeight="Bold" Foreground="#555"/>
-                        <TextBlock x:Name="lblMediaDiaria" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                        <TextBlock Text="Média diária" FontWeight="Bold" Foreground="#555" FontSize="13"/>
+                        <TextBlock x:Name="lblMediaDiaria" FontSize="14" FontWeight="SemiBold" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total de horas trabalhadas -->
+                <Border Background="White" CornerRadius="6" Padding="6" Margin="3">
+                    <StackPanel>
+                        <TextBlock Text="Horas Trabalhadas"
+                                   Foreground="#555"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock x:Name="lblTotalHorasTrabalhadas"
+                                   Foreground="#FF302F2F"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Text="00:00"
+                                   HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Meta por período -->
+                <Border Background="#FAFAFA" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Meta por Período" FontWeight="Bold" Foreground="#555" FontSize="13"/>
+                        <TextBlock x:Name="lblMetaPorPeriodo" FontSize="14" FontWeight="SemiBold" Foreground="#333"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Progresso da meta -->
-                <Border Background="#FFBEE3E9" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FFBEE3E9" CornerRadius="6" Margin="3" Padding="6" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Progresso da meta" FontWeight="Bold" Foreground="#FF0075FF"/>
-                        <TextBlock x:Name="lblProgressoMeta" FontSize="16" FontWeight="SemiBold" Foreground="#FF0075FF"/>
-                    </StackPanel>
-                </Border>
-
-                <Border Background="#FAFAFA" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#DDD" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="Meta por Período" FontWeight="Bold" Foreground="#555"/>
-                        <TextBlock x:Name="lblMetaPorPeriodo" FontSize="16" FontWeight="SemiBold" Foreground="#333"/>
+                        <TextBlock Text="Progresso da meta" FontWeight="Bold" Foreground="#FF0075FF" FontSize="13"/>
+                        <TextBlock x:Name="lblProgressoMeta" FontSize="14" FontWeight="SemiBold" Foreground="#FF0075FF"/>
                     </StackPanel>
                 </Border>
 
 
             </UniformGrid>
+
 
 
 

@@ -34,6 +34,16 @@ namespace MetaGo
 
         }
 
+        public string TotalHorasTrabalhadas
+        {
+            get
+            {
+                TimeSpan total = Registros.Aggregate(TimeSpan.Zero, (acc, r) => acc + r.HorasTrabalhadas);
+                return $"{(int)total.TotalHours:D2}:{total.Minutes:D2}";
+            }
+        }
+
+
         private string ultimaPastaUsada = AppDomain.CurrentDomain.BaseDirectory;
 
         private decimal _metaMensal = 10000m;
@@ -352,6 +362,7 @@ namespace MetaGo
             // Atualiza o label no card novo
             lblMetaPorPeriodo.Text = $"Meta por período: {metaPorPeriodo:C}";
 
+            lblTotalHorasTrabalhadas.Text = $"Total de horas: {TotalHorasTrabalhadas}";
 
             // Atualiza o resumo
             lblTotalGanhos.Text = $"Total ganho: {totalGanhos:C}";
