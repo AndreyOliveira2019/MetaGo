@@ -42,7 +42,7 @@
             <RowDefinition Height="Auto" MinHeight="40"/>
             <RowDefinition Height="Auto" MinHeight="86"/>
             <RowDefinition/>
-            <RowDefinition Height="Auto" MinHeight="400.58"/>
+            <RowDefinition Height="Auto" MinHeight="413.17"/>
         </Grid.RowDefinitions>
 
 
@@ -153,7 +153,7 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Data" Width="150">
+                    <GridViewColumn Header="Data" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Data, StringFormat='{}{0:dd/MM/yyyy}'}"
@@ -164,7 +164,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Ganhos" Width="120">
+                    <GridViewColumn Header="Ganhos" Width="110">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Ganhos, StringFormat='R$ {0:N2}'}"
@@ -175,7 +175,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Despesas" Width="120">
+                    <GridViewColumn Header="Despesas" Width="110">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Despesas, StringFormat='R$ {0:N2}'}"
@@ -186,7 +186,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Tipo de Despesa" Width="280">
+                    <GridViewColumn Header="Tipo de Despesa" Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding DescricaoDespesa}"
@@ -209,7 +209,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Horas Trabalhadas" Width="120">
+                    <GridViewColumn Header="Horas Online" Width="90">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding HorasTrabalhadas, StringFormat={}{0:hh\\:mm}}"
@@ -219,6 +219,18 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+
+                    <GridViewColumn Header="Ganho/Hora (bruto)" Width="140">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding GanhoHora}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
                 </GridView>
             </ListView.View>
         </ListView>
@@ -321,6 +333,22 @@
                                    FontSize="14"
                                    FontWeight="Bold"
                                    Text="00:00"
+                                   HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total de ganhos por horas trabalhadas -->
+                <Border Background="White" CornerRadius="6" Padding="6" Margin="3">
+                    <StackPanel>
+                        <TextBlock Text="Ganhos por Hora (bruto)"
+                                   Foreground="#555"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock x:Name="lblGanhosPorHora"
+                                   Foreground="#FF302F2F"
+                                   FontSize="14"
+                                   FontWeight="Bold"
                                    HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>

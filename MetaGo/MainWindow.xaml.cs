@@ -31,6 +31,9 @@ namespace MetaGo
             public DateTime Entrada { get; set; }
             public DateTime Saida { get; set; }
             public TimeSpan HorasTrabalhadas => Saida - Entrada;
+            public decimal GanhoHora => HorasTrabalhadas.TotalHours > 0
+                ? Ganhos / (decimal)HorasTrabalhadas.TotalHours
+                : 0;
 
         }
 
@@ -328,6 +331,8 @@ namespace MetaGo
 
             lblDiasRestantes.Text = textoDiasRestantes;
 
+
+
             decimal totalGanhos = Registros.Sum(r => r.Ganhos);
             decimal totalDespesas = Registros.Sum(r => r.Despesas);
             decimal saldoAtual = totalGanhos - totalDespesas;
@@ -363,6 +368,15 @@ namespace MetaGo
             lblMetaPorPeriodo.Text = $"Meta por período: {metaPorPeriodo:C}";
 
             lblTotalHorasTrabalhadas.Text = $"Total de horas: {TotalHorasTrabalhadas}";
+
+            decimal mediaGanhoHora = Registros
+                .Where(r => r.HorasTrabalhadas.TotalHours > 0)
+                .Select(r => r.GanhoHora)
+                .DefaultIfEmpty(0)
+                .Average();
+
+            lblGanhosPorHora.Text = $"Ganho por hora: {mediaGanhoHora:C}";
+
 
             // Atualiza o resumo
             lblTotalGanhos.Text = $"Total ganho: {totalGanhos:C}";
