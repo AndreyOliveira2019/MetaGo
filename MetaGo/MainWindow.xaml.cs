@@ -369,11 +369,8 @@ namespace MetaGo
 
             lblTotalHorasTrabalhadas.Text = $"Total de horas: {TotalHorasTrabalhadas}";
 
-            decimal mediaGanhoHora = Registros
-                .Where(r => r.HorasTrabalhadas.TotalHours > 0)
-                .Select(r => r.GanhoHora)
-                .DefaultIfEmpty(0)
-                .Average();
+            double totalHoras = Registros.Sum(r => r.HorasTrabalhadas.TotalHours);
+            decimal mediaGanhoHora = totalHoras > 0 ? totalGanhos / (decimal)totalHoras : 0;
 
             lblGanhosPorHora.Text = $"Ganho por hora: {mediaGanhoHora:C}";
 
