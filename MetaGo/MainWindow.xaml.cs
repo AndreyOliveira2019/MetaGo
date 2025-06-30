@@ -28,6 +28,10 @@ namespace MetaGo
             public decimal Despesas { get; set; }
             public string? DescricaoDespesa { get; set; }
             public decimal Saldo => Ganhos - Despesas;
+            public DateTime Entrada { get; set; }
+            public DateTime Saida { get; set; }
+            public TimeSpan HorasTrabalhadas => Saida - Entrada;
+
         }
 
         private string ultimaPastaUsada = AppDomain.CurrentDomain.BaseDirectory;
@@ -407,12 +411,20 @@ namespace MetaGo
                     return;
                 }
 
+                DateTime entrada = TimeSpan.TryParse(txtHoraEntrada.Text, out TimeSpan ent) ?
+                   datePicker.SelectedDate.Value.Date + ent : DateTime.Now;
+
+                DateTime saida = TimeSpan.TryParse(txtHoraSaida.Text, out TimeSpan sai) ?
+                                 datePicker.SelectedDate.Value.Date + sai : DateTime.Now;
+
                 Registros.Add(new RegistroDiario
                 {
                     Data = datePicker.SelectedDate ?? DateTime.Today,
                     Ganhos = ganhos,
                     Despesas = despesas,
-                    DescricaoDespesa = descricao
+                    DescricaoDespesa = descricao,
+                    Entrada = entrada,
+                    Saida = saida
                 });
 
                 txtGanhos.Clear();
@@ -587,6 +599,25 @@ namespace MetaGo
         {
             telaManutencao = new MetaGo.Views.TelaManutencao();
             telaManutencao.Show();
+        }
+
+        private void TimeTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Só permite números e dois pontos
+            e.Handled = !char.IsDigit(e.Text, 0) && e.Text != ":";
+        }
+
+        private void TimeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            string texto = textBox?.Text ?? "";
+
+            // Auto adiciona ":" depois de 2 números
+            if (texto.Length == 2 && !texto.Contains(":"))
+            {
+                textBox.Text = texto + ":";
+                textBox.CaretIndex = textBox.Text.Length;
+            }
         }
     }
 
